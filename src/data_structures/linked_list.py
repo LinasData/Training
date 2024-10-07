@@ -1,97 +1,150 @@
+from typing import Any, Optional
+
+
 class Node:
-    def __init__(self, head):
-        self.data = head
-        self.next = None
+    """
+    A class representing a single node in a linked list.
+
+    Attributes:
+        data (Any): The data stored in the node.
+        next (Optional[Node]): The reference to the next node in the list.
+    """
+
+    def __init__(self, data: Any) -> None:
+        """
+        Initializes a new node with given data.
+
+        Args:
+            data (Any): The data for the node.
+        """
+        self.data = data
+        self.next: Optional[Node] = None
 
 
 class LinkedList:
-    def __init__(self):
-        self.head = None
+    """
+    A class representing a singly linked list.
+    """
 
-    def append(self, value):
+    def __init__(self) -> None:
+        """
+        Initializes an empty linked list.
+        """
+        self.head: Optional[Node] = None
+
+    def append(self, value: Any) -> None:
+        """
+        Appends a new node with the specified value at the end of the linked list.
+
+        Args:
+            value (Any): The value to be added at the end of the list.
+
+        Returns:
+            None
+        """
+        new_node = Node(value)
         if self.head is None:
-            self.head = Node(value)
+            self.head = new_node
         else:
             current_node = self.head
-
-            while current_node.next is not None:
+            while current_node.next:
                 current_node = current_node.next
-            current_node.next = Node(value)
+            current_node.next = new_node
 
-    def get_element(self, position):
-        length = self.__len__()
-        if length == 0 or position > length:
-            raise ValueError
+    def get_element(self, position: int) -> Any:
+        """
+        Returns the data of the node at the specified position.
+
+        Args:
+            position (int): The zero-based index of the node to retrieve.
+
+        Raises:
+            IndexError: If the position is out of bounds.
+
+        Returns:
+            Any: The data at the specified position.
+        """
+        if not 0 <= position < self.__len__():
+            raise IndexError("Position out of bounds.")
 
         current_node = self.head
-
-        for index in range(length):
-            if index == position:
-                return current_node.data
+        for _ in range(position):
             current_node = current_node.next
+        return current_node.data
 
-        raise IndexError
+    def insertion(self, index: int, value: Any) -> None:
+        """
+        Inserts a new node with the specified value at the given index.
 
-    def insertion(self, index, value):
-        length = self.__len__()
+        Args:
+            index (int): The zero-based index where the new node should be inserted.
+            value (Any): The value for the new node.
+
+        Raises:
+            IndexError: If the index is out of bounds.
+
+        Returns:
+            None
+        """
+        if not 0 <= index <= self.__len__():
+            raise IndexError("Index out of bounds.")
+
         new_node = Node(value)
-        current_node = self.head
-
-        if length == 0 or index > length:
-            raise ValueError
 
         if index == 0:
             new_node.next = self.head
             self.head = new_node
-            return
-
-        if index == length:
-            while current_node.next:
+        else:
+            current_node = self.head
+            for _ in range(index - 1):
                 current_node = current_node.next
-
-            current_node.next = new_node
-
-        position = 0
-
-        while current_node != None and index != position + 1:
-            current_node = current_node.next
-            position += 1
-
-        if current_node is not None:
-            new_node = Node(value)
             new_node.next = current_node.next
             current_node.next = new_node
 
-    def __len__(self):
-        if self.head:
-            count = 1
-            current_node = self.head
+    def __len__(self) -> int:
+        """
+        Returns the number of nodes in the linked list.
 
-            while current_node.next is not None:
-                count += 1
-                current_node = current_node.next
-            return count
-        raise ValueError
+        Returns:
+            int: The number of nodes in the list.
+        """
+        count = 0
+        current_node = self.head
 
-    def __str__(self):
-        if self.head:
-            current_node = self.head
-            text = f"[{current_node.data}]"
+        while current_node:
+            count += 1
+            current_node = current_node.next
+        return count
 
-            while current_node.next is not None:
-                text += f"->[{current_node.next.data}]"
-                current_node = current_node.next
-            return text
+    def __str__(self) -> str:
+        """
+        Returns a string representation of the linked list.
 
-        raise ValueError
+        Returns:
+            str: A string showing the nodes in the list in order, separated by arrows.
+        """
+        if not self.head:
+            return "[]"
+
+        nodes = []
+        current_node = self.head
+        while current_node:
+            nodes.append(f"[{current_node.data}]")
+            current_node = current_node.next
+
+        return "->".join(nodes)
 
 
-list = LinkedList()
-list.head = Node(2)
-list.append(3)
-list.append(5)
-print(list)
-print(len(list))
-print(list.get_element(2))
-list.insertion(0, 4)
-print(list)
+# Example usage
+ll = LinkedList()
+ll.append(2)
+ll.append(3)
+ll.append(5)
+print(ll)  # Output: [2]->[3]->[5]
+
+print(len(ll))  # Output: 3
+print(ll.get_element(2))  # Output: 5
+
+ll.insertion(0, 1)
+ll.insertion(3, 4)
+print(ll)  # Output: [1]->[2]->[3]->[4]->[5]
