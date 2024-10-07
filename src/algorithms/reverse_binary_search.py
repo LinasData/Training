@@ -1,7 +1,5 @@
 from typing import List
 
-import big_o
-
 
 def binary_search(list_of_nums: List[int], needed_num: int, index: int = 0):
 
@@ -25,6 +23,3 @@ print(binary_search( [13, 11, 10, 7, 4, 3, 1, 0], 7))
 # Function to generate test inputs for big_o analysis
 def generate_input(n):
     return list(range(n))
-
-best, others = big_o.big_o(binary_search, generate_input)
-
