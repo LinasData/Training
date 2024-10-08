@@ -104,11 +104,13 @@ class DoubleLinkedList:
             current_node = self.head
             for _ in range(index - 1):
                 current_node = current_node.next
+
             new_node.next = current_node.next
-            new_node.prev = current_node
+            if current_node.next:
+                current_node.next.prev = new_node
 
             current_node.next = new_node
-            new_node.next.prev = new_node
+            new_node.prev = current_node
 
     def deletion_by_index(self, index):
         """
@@ -127,7 +129,9 @@ class DoubleLinkedList:
 
         if index == 0:
             self.head = self.head.next
-            self.head.prev = None
+
+            if self.head:
+                self.head.prev = None
 
         elif index == self.__len__():
             while range(index):
@@ -135,13 +139,12 @@ class DoubleLinkedList:
             current_node.prev.next = current_node.next
 
         else:
-            current_node = self.head
             for _ in range(index):
-                current_node = current_node.next  # 4
+                current_node = current_node.next
 
-            current_node.prev.next = current_node.next
-
-            if index != self.__len__():
+            if current_node.prev:
+                current_node.prev.next = current_node.next
+            if current_node.next:
                 current_node.next.prev = current_node.prev
 
     def __len__(self) -> int:
