@@ -101,6 +101,30 @@ class LinkedList:
             new_node.next = current_node.next
             current_node.next = new_node
 
+    def deletion_by_index(self, index):
+        """
+        Deletes a node at the specified index.
+
+        Args:
+            index (int): The zero-based index of the node to delete.
+
+        Raises:
+            IndexError: If the index is out of bounds.
+        """
+        if not 0 <= index <= self.__len__():
+            raise IndexError("Index out of bounds.")
+
+        if index == 0:
+            self.head = self.head.next
+
+        else:
+            current_node = self.head
+
+            for _ in range(index - 1):
+                current_node = current_node.next
+
+            current_node.next = current_node.next.next
+
     def __len__(self) -> int:
         """
         Returns the number of nodes in the linked list.
@@ -148,3 +172,6 @@ print(ll.get_element(2))  # Output: 5
 ll.insertion(0, 1)
 ll.insertion(3, 4)
 print(ll)  # Output: [1]->[2]->[3]->[4]->[5]
+
+ll.deletion_by_index(4)  # Output: [1]->[2]->[3]->[4]
+print(ll)

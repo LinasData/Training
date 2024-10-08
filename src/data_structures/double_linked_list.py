@@ -133,11 +133,6 @@ class DoubleLinkedList:
             if self.head:
                 self.head.prev = None
 
-        elif index == self.__len__():
-            while range(index):
-                current_node = current_node.next
-            current_node.prev.next = current_node.next
-
         else:
             for _ in range(index):
                 current_node = current_node.next
